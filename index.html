@@ -169,7 +169,6 @@
     <div class="cell"><div class="k">Window</div><div class="v small" id="cdown">Reading the register…</div></div>
     <div class="cell"><div class="k">Paid mint</div><div class="v small">0.001 BNB / box</div></div>
   </div>
-  <p class="small" style="margin-top:10px">Window: <b>Friday 13 November 2026, 23:00 WIB</b> (16:00 UTC) to <b>Monday 16 November 2026, 23:00 WIB</b> (16:00 UTC). The accession count above is the only figure this catalogue publishes; it is read directly from the registry contract.</p>
 </header>
 
 <section id="buy">
@@ -186,11 +185,11 @@
 <section id="claim">
   <div class="lotno">Lot 02 — Free Custody</div>
   <h2>Claim a free box</h2>
-  <p class="secnote">Post from your own X account with this page's address and your file ref (your wallet's last six characters, lowercased), then file the link — the registrar signs a permit valid for two hours. Route B needs a verified account; Route A accepts any account when the wallet holds an Agent ID. One claim per route, per wallet and per X name.</p>
+  <p class="secnote">Post from your own X account — with this page's address and your file ref (your wallet's last six characters, lowercased) — then file the link. Route B: verified accounts only. Route A: any account, if the wallet holds an Agent ID. One claim per route, per wallet, per X name.</p>
 
   <div class="lane">
     <h3>Route A — Agent ID holders</h3>
-    <p>Your wallet must hold a Binance Agent ID (the registry contract checks this on-chain) <b>and</b> you must have published the notice from your own X account — any account, verified or not: custody follows the Agent ID, not the badge. Descendants of the works are still expected to sign the visitors' book.</p>
+    <p>For wallets holding a Binance Agent ID. Post the notice from any X account, verified or not: custody follows the Agent ID, not the badge.</p>
     <div class="flow"><span>Your file ref:</span><span class="fileref" id="markCodeA">connect first</span>
       <a id="xPostBtnA" target="_blank" rel="noopener"><button class="ghost" type="button">1 · Post on X</button></a></div>
     <div class="flow"><input id="tweetUrlA" placeholder="Paste your post link — https://x.com/you/status/…"></div>
@@ -203,7 +202,7 @@
 
   <div class="lane">
     <h3>Route B — X posters</h3>
-    <p>No Agent ID required. Publish the notice from your verified X account, file the link, and the registrar verifies that the post is yours, is public, and carries the link and your file ref before signing.</p>
+    <p>No Agent ID needed — post the notice from your verified X account and file the link; the registrar verifies the post is yours, then signs.</p>
     <div class="flow"><span>Your file ref:</span><span class="fileref" id="markCodeB">connect first</span>
       <a id="xPostBtnB" target="_blank" rel="noopener"><button class="ghost" type="button">1 · Post on X</button></a></div>
     <div class="flow"><input id="tweetUrlB" placeholder="Paste your post link — https://x.com/you/status/…"></div>
@@ -218,8 +217,7 @@
 <section id="market">
   <div class="lotno">Lot 03 — The Exchange Desk</div>
   <h2>Trade boxes and relics</h2>
-  <p>The registry keeps its own exchange desk, a separate contract with fixed terms: listings are at whatever price the seller names, in BNB, and they do not expire. The desk takes a <b>2.5% fee</b> from the seller's proceeds, paid to the treasury; the seller receives the remaining 97.5%. <b>Sealed boxes may be traded before the reveal</b> — a buyer takes the box exactly as the seller held it, unopened.</p>
-  <p class="small">The board below is kept by this page alone: every offer is read directly from the desk's records on-chain and checked against its book before it is shown — there is no indexer and no other board. If a sale's proceeds cannot be delivered to a seller's wallet directly, they wait at the desk as a pending withdrawal the seller can collect.</p>
+  <p>Listings are fixed-price in BNB at the seller's price and never expire; the desk takes 2.5% of the proceeds for the treasury. Sealed boxes may trade before the reveal. Offers below are read straight from the desk's on-chain records — no indexer.</p>
 
   <div class="deskh"><h3>On the desk</h3><span class="small">Boxes currently offered for sale</span></div>
   <div class="msg" id="deskMsg">Reading the desk…</div>
