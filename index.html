@@ -71,6 +71,18 @@
   .plate svg{display:block; margin:2px auto 8px}
   .plate .plabel{font-family:"IBM Plex Mono", monospace; font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--ink2); border-top:1px solid var(--line); padding-top:8px}
   .plate .pname{font-family:"Fraunces", serif; font-weight:600; font-size:18px; text-transform:none; letter-spacing:0; color:var(--ink)}
+  .deskh{display:flex; justify-content:space-between; align-items:baseline; gap:10px; flex-wrap:wrap; margin-top:20px; border-top:1px dashed var(--line); padding-top:14px}
+  .deskh h3{margin:0}
+  .cards{display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:16px; margin:12px 0 4px}
+  .bcard{border:1.5px solid var(--ink); background:var(--card); padding:12px 12px 10px; display:flex; flex-direction:column}
+  .bcard img{width:100%; height:auto; display:block; background:#fffdf7; border:1px solid var(--line)}
+  .bcard .bname{font-family:"Fraunces", serif; font-weight:600; font-size:17px; line-height:1.3; margin-top:10px}
+  .bcard .bmeta{font-family:"IBM Plex Mono", monospace; font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--ink2); border-top:1px solid var(--line); padding-top:7px; margin-top:7px}
+  .bcard .bprice{font-family:"Fraunces", serif; font-weight:900; font-size:20px; margin:8px 0 0}
+  .bcard .bact{margin-top:auto; padding-top:10px; display:flex; flex-direction:column; gap:8px}
+  .bcard .bact button{width:100%}
+  .bcard .bact input.price{width:100%}
+  .bcard .msg{font-size:14px; min-height:0; margin:0}
   button{
     font-family:"IBM Plex Mono", monospace; font-size:13.5px; letter-spacing:1px; cursor:pointer;
     background:var(--iron); color:var(--paper); border:1px solid var(--iron); padding:10px 16px;
@@ -330,33 +342,15 @@
   <div class="lotno">Lot 06 — The Exchange Desk</div>
   <h2>Trade boxes and relics</h2>
   <p>The registry keeps its own exchange desk, a separate contract with fixed terms: listings are at whatever price the seller names, in BNB, and they do not expire. The desk takes a <b>2.5% fee</b> from the seller's proceeds, paid to the treasury; the seller receives the remaining 97.5%. <b>Sealed boxes may be traded before the reveal</b> — a buyer takes the box exactly as the seller held it, unopened.</p>
-  <p class="small">There is no central listing board and no indexer behind this page: the desk trades by box number. Before buying, check the number's listing below and its ownership on BscScan. If a sale's proceeds cannot be delivered to a seller's wallet directly, they wait at the desk as a pending withdrawal the seller can collect.</p>
+  <p class="small">The board below is kept by this page alone: every offer is read directly from the desk's records on-chain and checked against its book before it is shown — there is no indexer and no other board. If a sale's proceeds cannot be delivered to a seller's wallet directly, they wait at the desk as a pending withdrawal the seller can collect.</p>
 
-  <div class="lane">
-    <h3>Offer a box for sale</h3>
-    <p>You must own the box. Step 1 approves the desk to move that one box when it sells; step 2 records your price. Cancelling returns full control to you.</p>
-    <div class="flow">
-      <label>Box № <input type="number" class="num" id="listTokenId" min="1" placeholder="e.g. 123"></label>
-      <label>Price (BNB) <input type="text" class="price" id="listPrice" placeholder="e.g. 0.005"></label>
-    </div>
-    <div class="flow">
-      <button id="approveBtn" type="button">1 · Approve the desk</button>
-      <button id="listBtn" class="rust" type="button">2 · List at this price</button>
-      <button id="cancelBtn" class="ghost" type="button">Cancel listing</button>
-    </div>
-    <div class="msg" id="msgList"></div>
-  </div>
+  <div class="deskh"><h3>On the desk</h3><span class="small">Boxes currently offered for sale</span></div>
+  <div class="msg" id="deskMsg">Reading the desk…</div>
+  <div class="cards" id="deskGrid"></div>
 
-  <div class="lane">
-    <h3>Acquire a listed box</h3>
-    <p>Enter a box number to read its listing from the desk — seller and price, exactly as recorded — then acquire it at that price.</p>
-    <div class="flow">
-      <label>Box № <input type="number" class="num" id="buyTokenId" min="1" placeholder="e.g. 123"></label>
-      <button id="checkListingBtn" type="button">Read listing</button>
-      <button id="buyListedBtn" class="rust" type="button" disabled>Buy this box</button>
-    </div>
-    <div class="msg" id="msgMarketBuy"></div>
-  </div>
+  <div class="deskh"><h3>Your custody</h3><span class="small">The boxes in your wallet, and the means to offer them</span></div>
+  <div class="msg" id="custodyMsg">Connect a wallet to see your boxes and offer them for sale.</div>
+  <div class="cards" id="custodyGrid"></div>
 
   <div class="lane">
     <h3>Proceeds awaiting collection</h3>
@@ -421,7 +415,6 @@ const MSEL = { list: "0x50fd7367", buy: "0xd96a094a", cancelListing: "0x305a67a8
 let provider = null, account = null;
 let priceWei = 1000000000000000n;
 let permits = { agent: null, x: null };
-let checkedListing = null;
 
 const padUint = n => BigInt(n).toString(16).padStart(64, "0");
 const padAddr = a => a.replace(/^0x/, "").toLowerCase().padStart(64, "0");
@@ -617,81 +610,292 @@ $("buyBtn").onclick = async () => {
   } catch (e) { msg.className = "msg err"; msg.textContent = e.message || String(e); }
 };
 
-/* ---- Exchange desk ---- */
-function tokenIdOf(id) {
-  const v = parseInt($(id).value || "", 10);
-  return (isNaN(v) || v < 1) ? null : v;
+/* ---- Exchange desk: the board, read from the chain itself ---- */
+const LOG_RPC = "https://bsc-mainnet.nodereal.io/v1/64a9df0874fb4a93b9d0a3849de012d3";
+const NFT_BLOCK0 = 133371789, MKT_BLOCK0 = 133371816;
+const TOPIC_TRANSFER = "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef";
+const TOPIC_LISTED = "0x6e16e8064e3c8254cef11e01e152416398602d7e8785f743f1c2f93a9a15ff35";
+const SEL_TOKENURI = "0xc87b56dd";
+const uriCache = new Map();
+let deskCache = { last: MKT_BLOCK0 - 1, cand: new Set() };
+let custCache = { acct: null, last: NFT_BLOCK0 - 1, cand: new Set() };
+let deskBusy = false, custBusy = false;
+
+async function rpcJson(method, params) {
+  const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), 15000);
+  try {
+    const r = await fetch(LOG_RPC, { method: "POST", headers: { "Content-Type": "application/json" }, signal: ctl.signal,
+      body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: method, params: params }) });
+    const j = await r.json();
+    if (j.error) throw new Error(j.error.message || (method + " failed"));
+    return j.result;
+  } finally { clearTimeout(t); }
 }
-$("approveBtn").onclick = async () => {
-  const msg = $("msgList");
+async function headBlock() { return parseInt(await rpcJson("eth_blockNumber", []), 16); }
+async function scanLogs(address, topics, from, to) {
+  let out = [];
+  for (let b = from; b <= to; b += 50000) {
+    const logs = await rpcJson("eth_getLogs", [{ address: address, topics: topics,
+      fromBlock: "0x" + b.toString(16), toBlock: "0x" + Math.min(b + 49999, to).toString(16) }]);
+    out = out.concat(logs || []);
+  }
+  return out;
+}
+async function mapChunked(items, n, fn) {
+  const out = new Array(items.length);
+  for (let i = 0; i < items.length; i += n) {
+    await Promise.all(items.slice(i, i + n).map((v, j) =>
+      Promise.resolve().then(() => fn(v)).then(r => { out[i + j] = r; }, () => { out[i + j] = null; })));
+  }
+  return out;
+}
+function decodeAbiString(hex) {
+  if (!hex || hex === "0x" || hex.length < 130) return null;
+  const len = Number(word(hex, 1));
+  const body = hex.slice(130, 130 + len * 2);
+  if (body.length < len * 2) return null;
+  const bytes = new Uint8Array(len);
+  for (let i = 0; i < len; i++) bytes[i] = parseInt(body.substr(i * 2, 2), 16);
+  return new TextDecoder().decode(bytes);
+}
+async function tokenMeta(tid) {
+  if (uriCache.has(tid)) return uriCache.get(tid);
+  let meta = { name: "FERO № " + tid, image: null };
+  try {
+    const uri = decodeAbiString(await rpcCall(SEL_TOKENURI + padUint(tid)));
+    if (uri && uri.indexOf("data:application/json;base64,") === 0) {
+      const bin = atob(uri.slice(29));
+      const j = JSON.parse(new TextDecoder().decode(Uint8Array.from(bin, c => c.charCodeAt(0))));
+      if (j.name) meta.name = j.name;
+      if (j.image) meta.image = j.image;
+    }
+  } catch (e) { /* keep the plain label */ }
+  uriCache.set(tid, meta);
+  return meta;
+}
+function shortAddr(a) { return a.slice(0, 6) + "…" + a.slice(-4); }
+function cardShell(meta, tid) {
+  const d = document.createElement("div");
+  d.className = "bcard";
+  if (meta.image) {
+    const img = document.createElement("img");
+    img.src = meta.image; img.alt = meta.name;
+    d.appendChild(img);
+  }
+  const nm = document.createElement("div");
+  nm.className = "bname"; nm.textContent = meta.name;
+  const mt = document.createElement("div");
+  mt.className = "bmeta"; mt.textContent = "Box № " + tid;
+  d.append(nm, mt);
+  return d;
+}
+function reloadDeskSoon() { setTimeout(() => { loadDesk(); loadCustody(); }, 6000); }
+async function waitReceipt(hash) {
+  for (let i = 0; i < 40; i++) {
+    try {
+      const r = await provider.request({ method: "eth_getTransactionReceipt", params: [hash] });
+      if (r) return r;
+    } catch (e) { /* keep waiting */ }
+    await new Promise(res => setTimeout(res, 3000));
+  }
+  return null;
+}
+
+/* -- On the desk: every live listing, from Listed events + listingOf -- */
+async function loadDesk() {
+  if (deskBusy) return;
+  deskBusy = true;
+  const msg = $("deskMsg"), grid = $("deskGrid");
+  try {
+    const head = await headBlock();
+    if (head > deskCache.last) {
+      const logs = await scanLogs(MARKET, [TOPIC_LISTED], deskCache.last + 1, head);
+      for (const lg of logs) deskCache.cand.add(Number(BigInt(lg.topics[2])));
+      deskCache.last = head;
+    }
+    const ids = [...deskCache.cand].sort((a, b) => a - b);
+    const rows = await mapChunked(ids, 12, async tid => {
+      const l = await rpcCall(MSEL.listingOf + padUint(tid), MARKET);
+      if (!l) return null;
+      const seller = wordAddr(l, 0), price = word(l, 1), active = wordNum(l, 2) === 1;
+      return (active && price > 0n) ? { tid: tid, seller: seller, price: price } : null;
+    });
+    const live = rows.filter(Boolean);
+    grid.innerHTML = "";
+    msg.className = "msg";
+    if (!live.length) {
+      msg.textContent = "Nothing on the desk yet.";
+    } else {
+      msg.textContent = live.length + (live.length === 1 ? " box" : " boxes") + " on the desk.";
+      for (const row of live) {
+        const meta = await tokenMeta(row.tid);
+        const card = cardShell(meta, row.tid);
+        card.querySelector(".bmeta").textContent = "Box № " + row.tid + " · Seller " + shortAddr(row.seller);
+        const pr = document.createElement("div");
+        pr.className = "bprice"; pr.textContent = fmtBNB(row.price);
+        const act = document.createElement("div");
+        act.className = "bact";
+        const btn = document.createElement("button");
+        btn.type = "button"; btn.className = "rust";
+        const mine = account && row.seller.toLowerCase() === account.toLowerCase();
+        if (mine) {
+          btn.textContent = "Your listing"; btn.disabled = true;
+          act.appendChild(btn);
+        } else {
+          btn.textContent = "Buy — " + fmtBNB(row.price);
+          const m = document.createElement("div"); m.className = "msg";
+          btn.onclick = () => deskBuy(row.tid, m, btn);
+          act.append(btn, m);
+        }
+        card.append(pr, act);
+        grid.appendChild(card);
+      }
+    }
+  } catch (e) {
+    msg.className = "msg err";
+    msg.textContent = "The desk could not be read just now.";
+  }
+  deskBusy = false;
+}
+async function deskBuy(tid, msg, btn) {
   try {
     if (!account) throw new Error("Connect your wallet first.");
-    const tid = tokenIdOf("listTokenId");
-    if (tid === null) throw new Error("Enter the box number first.");
+    btn.disabled = true;
+    msg.className = "msg"; msg.textContent = "Reading the desk's book…";
+    const l = await rpcCall(MSEL.listingOf + padUint(tid), MARKET);
+    if (!l) throw new Error("The listing could not be read.");
+    const seller = wordAddr(l, 0), price = word(l, 1), active = wordNum(l, 2) === 1;
+    if (!active || price === 0n) throw new Error("Box № " + tid + " is no longer listed.");
+    if (seller.toLowerCase() === account.toLowerCase()) throw new Error("This is your own listing.");
+    msg.textContent = "Acquiring box № " + tid + " for " + fmtBNB(price) + "…";
+    const h = await sendTx(MARKET, MSEL.buy + padUint(tid), "0x" + price.toString(16));
+    afterTx(msg, h, "Box acquired");
+    reloadDeskSoon();
+  } catch (e) {
+    msg.className = "msg err"; msg.textContent = e.message || String(e);
+    btn.disabled = false;
+    setTimeout(loadDesk, 1500);
+  }
+}
+
+/* -- Your custody: the connected wallet's boxes, from Transfer events + ownerOf -- */
+function custodyNote(text, cls) {
+  const msg = $("custodyMsg");
+  msg.className = "msg" + (cls ? " " + cls : "");
+  msg.textContent = text;
+}
+async function loadCustody() {
+  const grid = $("custodyGrid");
+  if (!account) {
+    grid.innerHTML = "";
+    custodyNote("Connect a wallet to see your boxes and offer them for sale.");
+    return;
+  }
+  if (custBusy) return;
+  custBusy = true;
+  try {
+    if (custCache.acct !== account.toLowerCase()) {
+      custCache = { acct: account.toLowerCase(), last: NFT_BLOCK0 - 1, cand: new Set() };
+    }
+    custodyNote("Reading your custody…");
+    const head = await headBlock();
+    if (head > custCache.last) {
+      const me = "0x" + padAddr(account);
+      const inLogs = await scanLogs(CONTRACT, [TOPIC_TRANSFER, null, me], custCache.last + 1, head);
+      const outLogs = await scanLogs(CONTRACT, [TOPIC_TRANSFER, me], custCache.last + 1, head);
+      for (const lg of inLogs.concat(outLogs)) custCache.cand.add(Number(BigInt(lg.topics[3])));
+      custCache.last = head;
+    }
+    const ids = [...custCache.cand].sort((a, b) => a - b);
+    const owned = await mapChunked(ids, 12, async tid => {
+      const o = await rpcCall(SEL.ownerOf + padUint(tid));
+      return (o && wordAddr(o, 0).toLowerCase() === account.toLowerCase()) ? tid : null;
+    });
+    const mineIds = owned.filter(x => x !== null);
+    grid.innerHTML = "";
+    if (!mineIds.length) {
+      custodyNote("No boxes in your custody yet.");
+    } else {
+      custodyNote("You hold " + mineIds.length + (mineIds.length === 1 ? " box." : " boxes."));
+      for (const tid of mineIds) {
+        const meta = await tokenMeta(tid);
+        const card = cardShell(meta, tid);
+        const l = await rpcCall(MSEL.listingOf + padUint(tid), MARKET);
+        const listed = !!(l && wordNum(l, 2) === 1 && word(l, 1) > 0n &&
+          wordAddr(l, 0).toLowerCase() === account.toLowerCase());
+        const act = document.createElement("div");
+        act.className = "bact";
+        const m = document.createElement("div"); m.className = "msg";
+        if (listed) {
+          const pr = document.createElement("div");
+          pr.className = "bprice"; pr.textContent = fmtBNB(word(l, 1));
+          const btn = document.createElement("button");
+          btn.type = "button"; btn.className = "ghost"; btn.textContent = "Cancel listing";
+          btn.onclick = () => custodyCancel(tid, m, btn);
+          card.appendChild(pr);
+          act.append(btn, m);
+        } else {
+          const inp = document.createElement("input");
+          inp.className = "price"; inp.type = "text"; inp.placeholder = "Price in BNB, e.g. 0.005";
+          const btn = document.createElement("button");
+          btn.type = "button"; btn.className = "rust"; btn.textContent = "List for sale";
+          btn.onclick = () => custodyList(tid, inp, m, btn);
+          act.append(inp, btn, m);
+        }
+        card.appendChild(act);
+        grid.appendChild(card);
+      }
+    }
+  } catch (e) {
+    custodyNote("Your custody could not be read just now.", "err");
+  }
+  custBusy = false;
+}
+async function custodyList(tid, inp, msg, btn) {
+  try {
+    if (!account) throw new Error("Connect your wallet first.");
+    const price = parseBNB(inp.value);
+    if (price === null) throw new Error("Enter a price in BNB, e.g. 0.005.");
+    btn.disabled = true;
     const own = await rpcCall(SEL.ownerOf + padUint(tid));
-    if (!own || wordAddr(own, 0).toLowerCase() !== account.toLowerCase()) throw new Error("This wallet does not own box № " + tid + ".");
+    if (!own || wordAddr(own, 0).toLowerCase() !== account.toLowerCase()) {
+      throw new Error("This wallet no longer owns box № " + tid + ".");
+    }
     const ga = await rpcCall(SEL.getApproved + padUint(tid));
     const afa = await rpcCall(SEL.isApprovedForAll + padAddr(account) + padAddr(MARKET));
-    if ((ga && wordAddr(ga, 0).toLowerCase() === MARKET.toLowerCase()) || (afa && wordNum(afa, 0) === 1)) {
-      msg.className = "msg ok"; msg.textContent = "The desk is already approved for this box — proceed to step 2.";
-      return;
+    const approved = (ga && wordAddr(ga, 0).toLowerCase() === MARKET.toLowerCase()) ||
+      (afa && wordNum(afa, 0) === 1);
+    if (!approved) {
+      msg.className = "msg";
+      msg.textContent = "Step 1 of 2 — approve the desk to move box № " + tid + " when it sells…";
+      const h1 = await sendTx(CONTRACT, SEL.approve + padAddr(MARKET) + padUint(tid));
+      msg.textContent = "Approval filed — waiting for it to confirm before listing…";
+      const rc = await waitReceipt(h1);
+      if (!rc) throw new Error("The approval is taking too long to confirm — check your wallet, then list again.");
+      if (rc.status === "0x0") throw new Error("The approval transaction failed on-chain.");
     }
-    msg.className = "msg"; msg.textContent = "Approving the desk for box № " + tid + "…";
-    const h = await sendTx(CONTRACT, SEL.approve + padAddr(MARKET) + padUint(tid));
-    afterTx(msg, h, "Approval filed — wait for it to confirm, then list");
-  } catch (e) { msg.className = "msg err"; msg.textContent = e.message || String(e); }
-};
-$("listBtn").onclick = async () => {
-  const msg = $("msgList");
-  try {
-    if (!account) throw new Error("Connect your wallet first.");
-    const tid = tokenIdOf("listTokenId");
-    if (tid === null) throw new Error("Enter the box number first.");
-    const price = parseBNB($("listPrice").value);
-    if (price === null) throw new Error("Enter a price in BNB, e.g. 0.005.");
     msg.className = "msg"; msg.textContent = "Listing box № " + tid + " at " + fmtBNB(price) + "…";
     const h = await sendTx(MARKET, MSEL.list + padUint(tid) + padUint(price));
     afterTx(msg, h, "Listed");
-  } catch (e) { msg.className = "msg err"; msg.textContent = e.message || String(e); }
-};
-$("cancelBtn").onclick = async () => {
-  const msg = $("msgList");
+    reloadDeskSoon();
+  } catch (e) {
+    msg.className = "msg err"; msg.textContent = e.message || String(e);
+    btn.disabled = false;
+  }
+}
+async function custodyCancel(tid, msg, btn) {
   try {
     if (!account) throw new Error("Connect your wallet first.");
-    const tid = tokenIdOf("listTokenId");
-    if (tid === null) throw new Error("Enter the box number first.");
+    btn.disabled = true;
     msg.className = "msg"; msg.textContent = "Cancelling the listing of box № " + tid + "…";
     const h = await sendTx(MARKET, MSEL.cancelListing + padUint(tid));
     afterTx(msg, h, "Listing cancelled");
-  } catch (e) { msg.className = "msg err"; msg.textContent = e.message || String(e); }
-};
-$("checkListingBtn").onclick = async () => {
-  const msg = $("msgMarketBuy");
-  checkedListing = null; $("buyListedBtn").disabled = true;
-  const tid = tokenIdOf("buyTokenId");
-  if (tid === null) { msg.className = "msg err"; msg.textContent = "Enter a box number."; return; }
-  msg.className = "msg"; msg.textContent = "Reading the desk's book…";
-  const l = await rpcCall(MSEL.listingOf + padUint(tid), MARKET);
-  if (!l) { msg.className = "msg err"; msg.textContent = "The listing could not be read."; return; }
-  const seller = wordAddr(l, 0), price = word(l, 1), active = wordNum(l, 2) === 1;
-  if (!active || price === 0n) { msg.className = "msg"; msg.textContent = "Box № " + tid + " is not listed for sale."; return; }
-  checkedListing = { tid: tid, price: price };
-  $("buyListedBtn").disabled = false;
-  msg.className = "msg ok";
-  msg.textContent = "Box № " + tid + " — seller " + seller.slice(0, 6) + "…" + seller.slice(-4) + ", price " + fmtBNB(price) + ". The desk's fee (2.5%) comes out of the seller's side.";
-};
-$("buyListedBtn").onclick = async () => {
-  const msg = $("msgMarketBuy");
-  try {
-    if (!account) throw new Error("Connect your wallet first.");
-    if (!checkedListing) throw new Error("Read the listing first.");
-    const value = "0x" + checkedListing.price.toString(16);
-    msg.className = "msg"; msg.textContent = "Acquiring box № " + checkedListing.tid + " for " + fmtBNB(checkedListing.price) + "…";
-    const h = await sendTx(MARKET, MSEL.buy + padUint(checkedListing.tid), value);
-    checkedListing = null; $("buyListedBtn").disabled = true;
-    afterTx(msg, h, "Box acquired");
-  } catch (e) { msg.className = "msg err"; msg.textContent = e.message || String(e); }
-};
+    reloadDeskSoon();
+  } catch (e) {
+    msg.className = "msg err"; msg.textContent = e.message || String(e);
+    btn.disabled = false;
+  }
+}
 $("withdrawBtn").onclick = async () => {
   const msg = $("msgWithdraw");
   try {
@@ -701,6 +905,28 @@ $("withdrawBtn").onclick = async () => {
     afterTx(msg, h, "Proceeds collected");
   } catch (e) { msg.className = "msg err"; msg.textContent = e.message || String(e); }
 };
+
+/* -- Desk wiring: the board is public on load; custody follows the wallet -- */
+const deskConnect0 = $("connectBtn").onclick;
+$("connectBtn").onclick = async () => {
+  await deskConnect0();
+  hookAccounts();
+  loadDesk();
+  loadCustody();
+};
+function hookAccounts() {
+  if (!provider || typeof provider.on !== "function" || hookAccounts.done) return;
+  hookAccounts.done = true;
+  provider.on("accountsChanged", accs => {
+    account = (accs && accs.length) ? accs[0] : null;
+    $("acct").textContent = account || "Not connected";
+    if (account) { updateLinks(); refresh(); }
+    loadDesk();
+    loadCustody();
+  });
+}
+loadDesk();
+loadCustody();
 
 /* ---- Copy helpers ---- */
 $("copyShare").onclick = async () => {
