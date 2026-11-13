@@ -28,7 +28,9 @@ AND the owner's wallet code — the wallet address lowercased, last 6 characters
 your owner this exact text, replacing the final line's code with their wallet code,
 and wait until they have posted and given you the post link:
 
-    Claiming a sealed box at the Ferrous Relics archive.
+    A dead factory left 3,333 sealed boxes behind. I just claimed one — free. 🏭
+
+    Ferrous Relics (FERO) on BSC: ancient machine relics, sealed until the window closes, then every box opens at the same moment.
 
     https://ferrous-relics.github.io/ferrous-relics/
 
