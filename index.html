@@ -175,7 +175,6 @@
 <section id="buy">
   <div class="lotno">Lot 01 — Paid Accession</div>
   <h2>Buy boxes — 0.001 BNB each</h2>
-  <p>Open to every wallet while the window is open, whether or not it has claimed a free box. No post is required for paid boxes, and there is no limit per wallet — first come, first served, up to <b>100 boxes per transaction</b>. Payment must be exact: the price is read from the contract and the full amount is forwarded to the treasury in the same transaction.</p>
   <div class="flow">
     <label>Boxes: <input type="number" class="num" id="buyQty" value="1" min="1" max="100"></label>
     <span>Total: <b id="buyTotal">0.001 BNB</b></span>
@@ -187,7 +186,7 @@
 <section id="claim">
   <div class="lotno">Lot 02 — Free Custody</div>
   <h2>Claim a free box</h2>
-  <p class="secnote">Both routes run only while the window is open, and both are granted against a post from your own X account — Route B only to verified accounts, while on Route A the registrar waives the verified check for any wallet that holds an Agent ID: publish a notice containing this page's address and your file reference — the last six characters of your wallet address, lowercased, issued below once you connect — then file the post's link. The registrar checks the post, signs a custody permit (valid for two hours — claim promptly once signed), and the claim itself costs nothing but gas. One claim per route per wallet; one claim per route per X name.</p>
+  <p class="secnote">Post from your own X account with this page's address and your file ref (your wallet's last six characters, lowercased), then file the link — the registrar signs a permit valid for two hours. Route B needs a verified account; Route A accepts any account when the wallet holds an Agent ID. One claim per route, per wallet and per X name.</p>
 
   <div class="lane">
     <h3>Route A — Agent ID holders</h3>
