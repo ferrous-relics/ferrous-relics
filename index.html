@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ferrous Relics (FERO) — Catalogue of Sealed Machine Relics · BNB Smart Chain</title>
+<meta name="description" content="FERROUS RELICS: 3,333 sealed boxes of ancient machine relics, catalogued on BNB Smart Chain. One free box for Agent ID holders, one free box for X posters — each against a verified post. Paid mint 0.001 BNB. All boxes open at once at the reveal.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,900&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f2ecdc;
+    --paper2:#e8dfc9;
+    --card:#faf6ea;
+    --ink:#262219;
+    --ink2:#5a5340;
+    --line:#b3a888;
+    --rust:#9c4a12;
+    --rust-d:#7a380c;
+    --iron:#33302a;
+    --ok:#3d6b2f;
+    --err:#a02c1c;
+  }
+  *{box-sizing:border-box}
+  html{background:#2b2925}
+  body{
+    margin:0 auto; max-width:980px; padding:0 30px 64px;
+    background:var(--paper); color:var(--ink);
+    font-family:"Source Serif 4", Georgia, serif; font-size:17px; line-height:1.62;
+    border-left:3px double #8f866b; border-right:3px double #8f866b;
+    min-height:100vh;
+  }
+  h1{font-family:"Fraunces", serif; font-weight:900; font-size:52px; line-height:1.04; margin:10px 0 4px; letter-spacing:.5px}
+  h2{font-family:"Fraunces", serif; font-weight:600; font-size:27px; margin:0 0 8px}
+  h3{font-family:"IBM Plex Mono", monospace; font-size:13px; letter-spacing:2.5px; text-transform:uppercase; color:var(--rust-d); margin:0 0 8px; font-weight:600}
+  a{color:var(--rust-d)}
+  .mono{font-family:"IBM Plex Mono", monospace; font-size:13px; word-break:break-all}
+  .small{font-size:15px; color:var(--ink2)}
+  .dept{
+    display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
+    font-family:"IBM Plex Mono", monospace; font-size:11.5px; letter-spacing:2px; text-transform:uppercase; color:var(--ink2);
+    border-bottom:1px solid var(--ink); padding:14px 0 7px;
+  }
+  .masthead{border-bottom:3px double var(--ink); padding-bottom:16px; position:relative}
+  .stamp{
+    display:inline-block; border:2px solid var(--rust); color:var(--rust-d);
+    font-family:"IBM Plex Mono", monospace; font-size:11.5px; letter-spacing:3px; text-transform:uppercase;
+    padding:4px 11px; transform:rotate(-2deg); margin:14px 0 2px; font-weight:600;
+  }
+  .subtitle{font-size:19px; max-width:62ch; margin:8px 0 0}
+  .subtitle em{color:var(--ink2)}
+  .ledger{
+    display:flex; gap:0; flex-wrap:wrap; margin-top:18px;
+    border:1.5px solid var(--ink); background:var(--card);
+  }
+  .ledger .cell{flex:1 1 220px; padding:12px 16px; border-right:1px solid var(--line)}
+  .ledger .cell:last-child{border-right:none}
+  .ledger .k{font-family:"IBM Plex Mono", monospace; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--ink2)}
+  .ledger .v{font-family:"Fraunces", serif; font-weight:900; font-size:30px; line-height:1.15}
+  .ledger .v.small{font-size:19px; font-family:"IBM Plex Mono", monospace; font-weight:600; padding-top:6px}
+  section{padding:26px 0 6px; border-top:1px solid var(--line); margin-top:26px}
+  .secnote{color:var(--ink2); font-style:italic; margin-top:0}
+  .lotno{font-family:"IBM Plex Mono", monospace; font-size:11px; letter-spacing:2px; color:var(--ink2); text-transform:uppercase}
+  table{width:100%; border-collapse:collapse; font-size:16px}
+  th,td{padding:7px 9px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top}
+  th{font-family:"IBM Plex Mono", monospace; font-size:11.5px; letter-spacing:1.5px; text-transform:uppercase; color:var(--ink2); font-weight:500}
+  td.num, th.num{text-align:right; font-variant-numeric:tabular-nums}
+  .plates{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; margin-top:8px}
+  .plate{border:1.5px solid var(--ink); background:var(--card); padding:14px 14px 10px; position:relative}
+  .plate svg{display:block; margin:2px auto 8px}
+  .plate .plabel{font-family:"IBM Plex Mono", monospace; font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--ink2); border-top:1px solid var(--line); padding-top:8px}
+  .plate .pname{font-family:"Fraunces", serif; font-weight:600; font-size:18px; text-transform:none; letter-spacing:0; color:var(--ink)}
+  button{
+    font-family:"IBM Plex Mono", monospace; font-size:13.5px; letter-spacing:1px; cursor:pointer;
+    background:var(--iron); color:var(--paper); border:1px solid var(--iron); padding:10px 16px;
+  }
+  button:hover{background:#171410}
+  button.rust{background:var(--rust); border-color:var(--rust-d)}
+  button.rust:hover{background:var(--rust-d)}
+  button.ghost{background:transparent; color:var(--ink)}
+  button.ghost:hover{background:rgba(38,34,25,.08)}
+  button:disabled{opacity:.45; cursor:not-allowed}
+  input{
+    font-family:"IBM Plex Mono", monospace; font-size:14px; padding:10px;
+    background:#fffdf7; color:var(--ink); border:1px solid var(--line); width:100%;
+  }
+  input.num{width:110px}
+  input.price{width:150px}
+  .flow{display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin:10px 0}
+  .flow input{flex:1 1 260px}
+  .flow input.num, .flow input.price{flex:0 0 auto}
+  .flow button{flex:0 0 auto}
+  .msg{font-size:15.5px; min-height:22px; margin:6px 0}
+  .msg.ok{color:var(--ok); font-weight:600}
+  .msg.err{color:var(--err); font-weight:600}
+  .lane{border:1.5px solid var(--ink); background:var(--card); padding:16px 18px; margin:14px 0}
+  .lane p{margin:4px 0}
+  .fileref{font-family:"IBM Plex Mono", monospace; font-size:18px; letter-spacing:2px; background:#fffdf7; border:1px dashed var(--rust); padding:2px 10px}
+  .steps{counter-reset:step; margin:0; padding:0}
+  .steps li{list-style:none; padding:10px 0 10px 52px; position:relative; border-bottom:1px dashed var(--line)}
+  .steps li:last-child{border-bottom:none}
+  .steps li::before{
+    counter-increment:step; content:"Step " counter(step);
+    position:absolute; left:0; top:13px; font-family:"IBM Plex Mono", monospace;
+    font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--rust-d); font-weight:600; white-space:nowrap;
+  }
+  pre.post, pre.agent{
+    white-space:pre-wrap; word-break:break-word; font-family:"IBM Plex Mono", monospace;
+    font-size:12.5px; line-height:1.6; background:#fffdf7; border:1px solid var(--line);
+    padding:14px; max-height:320px; overflow:auto;
+  }
+  .herowrap{display:flex; gap:26px; flex-wrap:wrap; align-items:flex-start}
+  .herowrap .txt{flex:1 1 420px}
+  .herowrap .art{flex:0 0 auto; margin:0 auto}
+  .figcap{font-family:"IBM Plex Mono", monospace; font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--ink2); text-align:center; margin-top:4px}
+  footer{margin-top:34px; border-top:3px double var(--ink); padding-top:14px; font-size:15px; color:var(--ink2)}
+  .acct{font-family:"IBM Plex Mono", monospace; font-size:13px; font-weight:500}
+  @media(max-width:640px){ h1{font-size:38px} body{padding:0 18px 48px} }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="dept"><span>Archive of Industrial Antiquities</span><span>Dept. of Ferrous Relics</span><span>Catalogue № 29</span></div>
+  <div class="stamp">Sealed · Reveal after the window</div>
+  <h1>FERROUS RELICS</h1>
+  <p class="subtitle">Three thousand three hundred and thirty-three sealed boxes, each holding one machine relic of a works that no longer exists — gear, astrolabe, engine, mask. Catalogued on BNB Smart Chain as FERO. <em>No box is opened before its time; when the window closes, every box opens at once.</em></p>
+  <div class="ledger">
+    <div class="cell"><div class="k">Boxes accessioned</div><div class="v"><span id="cTotal">…</span> <span style="font-size:17px; color:var(--ink2)">/ 3,333</span></div></div>
+    <div class="cell"><div class="k">Window</div><div class="v small" id="cdown">Reading the register…</div></div>
+    <div class="cell"><div class="k">Paid mint</div><div class="v small">0.001 BNB / box</div></div>
+  </div>
+  <p class="small" style="margin-top:10px">Window: <b>Friday 13 November 2026, 23:00 WIB</b> (16:00 UTC) to <b>Monday 16 November 2026, 23:00 WIB</b> (16:00 UTC). The accession count above is the only figure this catalogue publishes; it is read directly from the registry contract.</p>
+</header>
+
+<section style="border-top:none; margin-top:10px; padding-top:14px">
+  <h3>Registry Office — Admission</h3>
+  <div class="flow">
+    <button id="connectBtn">Connect wallet</button>
+    <span id="acct" class="acct">Not connected</span>
+  </div>
+  <div class="msg" id="walletMsg"></div>
+  <p class="small">Registry (BNB Smart Chain, 56): <span class="mono">0x76FB0A89c8618A1d7Cf3E2123ae43E5aeb36f2F4</span> ·
+  <a href="https://bscscan.com/address/0x76FB0A89c8618A1d7Cf3E2123ae43E5aeb36f2F4" target="_blank" rel="noopener">BscScan</a><br>
+  Exchange desk: <span class="mono">0x8a1982a51E74817a7dB7B8F980C970ED1f5A4074</span> ·
+  <a href="https://bscscan.com/address/0x8a1982a51E74817a7dB7B8F980C970ED1f5A4074" target="_blank" rel="noopener">BscScan</a>.
+  Neither contract has an administrator: no owner, no pause, no withdrawal of other people's property. Paid-mint BNB is forwarded to the treasury in the same transaction; the registry retains nothing.</p>
+</section>
+
+<section>
+  <div class="lotno">Lot 01 — The Collection</div>
+  <h2>What is in the boxes</h2>
+  <div class="herowrap">
+    <div class="txt">
+      <p>Every FERO token begins life as a sealed box. Its contents were fixed before the window opened: the registrar committed a hash of the reveal seed to the contract in advance, so the assignment of relics to boxes was settled before a single box was claimed — and could not be rearranged afterwards. Nobody, including the registrar, can say which box holds what until the reveal.</p>
+      <p>When the window closes, the seed is published, the contract checks it against the committed hash, and all 3,333 boxes open simultaneously. From that moment each relic's tier and traits — background, frame, motif, core, ornament — are computed by the contract itself, permanently, from the seed and the box's number.</p>
+      <p>Boxes that nobody claimed or bought are not destroyed. After the reveal they pass to the treasury, which offers them through the exchange desk on this page.</p>
+    </div>
+    <figure class="art" style="margin:0">
+      <svg width="300" height="300" viewBox="0 0 300 300" role="img" aria-label="Engraved astrolabe, specimen study">
+        <g fill="none" stroke="#262219">
+          <circle cx="150" cy="150" r="138" stroke-width="2.5"/>
+          <circle cx="150" cy="150" r="130" stroke-width="1"/>
+          <circle cx="150" cy="150" r="112" stroke-width="9" stroke-dasharray="2 9.71"/>
+          <circle cx="150" cy="150" r="98" stroke-width="1.5"/>
+          <circle cx="150" cy="150" r="72" stroke-width="16" stroke-dasharray="11.3 11.3" opacity=".85"/>
+          <circle cx="150" cy="150" r="52" stroke-width="1.5"/>
+          <line x1="150" y1="30" x2="150" y2="270" stroke-width="1"/>
+          <line x1="30" y1="150" x2="270" y2="150" stroke-width="1"/>
+          <line x1="65" y1="65" x2="235" y2="235" stroke-width="1"/>
+          <line x1="235" y1="65" x2="65" y2="235" stroke-width="1"/>
+          <line x1="150" y1="150" x2="216" y2="92" stroke-width="3"/>
+          <circle cx="216" cy="92" r="6" stroke-width="2"/>
+          <circle cx="150" cy="150" r="17" stroke-width="2"/>
+          <circle cx="150" cy="150" r="4" fill="#262219"/>
+          <circle cx="150" cy="52" r="9" stroke-width="1.5"/>
+          <circle cx="150" cy="248" r="9" stroke-width="1.5"/>
+          <circle cx="52" cy="150" r="9" stroke-width="1.5"/>
+          <circle cx="248" cy="150" r="9" stroke-width="1.5"/>
+        </g>
+      </svg>
+      <figcaption class="figcap">Fig. 1 — Astrolabe, study for the sealed issue</figcaption>
+    </figure>
+  </div>
+  <table style="margin-top:14px">
+    <tr><th>Grade at reveal</th><th>Character</th><th class="num">Boxes of 3,333</th><th class="num">Share</th></tr>
+    <tr><td><b>Common</b></td><td>Works standard issue — gears, cranks, gauges</td><td class="num">≈ 2,000</td><td class="num">≈ 60%</td></tr>
+    <tr><td><b>Rare</b></td><td>Instrument grade — astrolabes, regulators</td><td class="num">≈ 1,000</td><td class="num">≈ 30%</td></tr>
+    <tr><td><b>Epic</b></td><td>Master's bench — cores and dividers</td><td class="num">≈ 266</td><td class="num">≈ 8%</td></tr>
+    <tr><td><b>Legendary</b></td><td>The foundry masks — struck once, never restruck</td><td class="num">≈ 67</td><td class="num">≈ 2%</td></tr>
+  </table>
+  <p class="small">Counts are the committed distribution bands, fixed by the seed before the window opened. The exact grade of any single box is unknowable until the reveal — that is the point of a sealed issue.</p>
+</section>
+
+<section>
+  <div class="lotno">Lot 02 — Specimen Plates</div>
+  <h2>Studies of the four motif families</h2>
+  <p class="secnote">The relics are drawn by the registry contract itself, as on-chain engravings assembled from trait plates. These studies show the draughtsmanship, not the contents of any particular box.</p>
+  <div class="plates">
+    <div class="plate">
+      <svg width="150" height="150" viewBox="0 0 150 150" role="img" aria-label="Gear study">
+        <g fill="none" stroke="#262219">
+          <circle cx="75" cy="75" r="52" stroke-width="13" stroke-dasharray="10.2 10.2"/>
+          <circle cx="75" cy="75" r="40" stroke-width="1.5"/>
+          <line x1="75" y1="40" x2="75" y2="110" stroke-width="2"/>
+          <line x1="40" y1="75" x2="110" y2="75" stroke-width="2"/>
+          <line x1="50" y1="50" x2="100" y2="100" stroke-width="2"/>
+          <line x1="100" y1="50" x2="50" y2="100" stroke-width="2"/>
+          <circle cx="75" cy="75" r="13" stroke-width="2.5"/>
+          <circle cx="75" cy="75" r="3.5" fill="#262219"/>
+        </g>
+      </svg>
+      <div class="plabel"><span class="pname">The Gear Engine</span><br>Plate I · Common motif family</div>
+    </div>
+    <div class="plate">
+      <svg width="150" height="150" viewBox="0 0 150 150" role="img" aria-label="Astrolabe study">
+        <g fill="none" stroke="#262219">
+          <circle cx="75" cy="75" r="66" stroke-width="2"/>
+          <circle cx="75" cy="75" r="56" stroke-width="6" stroke-dasharray="2 7.21"/>
+          <circle cx="75" cy="75" r="44" stroke-width="1.2"/>
+          <line x1="75" y1="31" x2="75" y2="119" stroke-width="1"/>
+          <line x1="31" y1="75" x2="119" y2="75" stroke-width="1"/>
+          <line x1="75" y1="75" x2="104" y2="50" stroke-width="2.5"/>
+          <circle cx="75" cy="75" r="10" stroke-width="2"/>
+          <circle cx="75" cy="75" r="2.5" fill="#262219"/>
+          <circle cx="75" cy="16" r="5" stroke-width="1.5"/>
+        </g>
+      </svg>
+      <div class="plabel"><span class="pname">The Astrolabe</span><br>Plate II · Rare motif family</div>
+    </div>
+    <div class="plate">
+      <svg width="150" height="150" viewBox="0 0 150 150" role="img" aria-label="Divider and core study">
+        <g fill="none" stroke="#262219">
+          <circle cx="75" cy="82" r="46" stroke-width="1.5"/>
+          <circle cx="75" cy="82" r="30" stroke-width="8" stroke-dasharray="7.85 7.85"/>
+          <line x1="75" y1="14" x2="42" y2="128" stroke-width="2"/>
+          <line x1="75" y1="14" x2="108" y2="128" stroke-width="2"/>
+          <circle cx="75" cy="14" r="6" stroke-width="2"/>
+          <circle cx="75" cy="82" r="9" stroke-width="2"/>
+          <circle cx="75" cy="82" r="2.5" fill="#262219"/>
+        </g>
+      </svg>
+      <div class="plabel"><span class="pname">Divider &amp; Core</span><br>Plate III · Epic motif family</div>
+    </div>
+    <div class="plate">
+      <svg width="150" height="150" viewBox="0 0 150 150" role="img" aria-label="Foundry mask study">
+        <g fill="none" stroke="#262219">
+          <path d="M75 12 C 105 12 122 38 122 72 C 122 108 100 132 75 138 C 50 132 28 108 28 72 C 28 38 45 12 75 12 Z" stroke-width="2.5"/>
+          <path d="M75 24 C 98 24 111 45 111 72 C 111 101 94 121 75 126 C 56 121 39 101 39 72 C 39 45 52 24 75 24 Z" stroke-width="1"/>
+          <ellipse cx="56" cy="66" rx="10" ry="6" stroke-width="2"/>
+          <ellipse cx="94" cy="66" rx="10" ry="6" stroke-width="2"/>
+          <line x1="44" y1="50" x2="68" y2="54" stroke-width="2"/>
+          <line x1="106" y1="50" x2="82" y2="54" stroke-width="2"/>
+          <line x1="75" y1="58" x2="75" y2="92" stroke-width="1.5"/>
+          <line x1="58" y1="108" x2="92" y2="108" stroke-width="2"/>
+          <circle cx="75" cy="34" r="3" fill="#262219"/>
+          <circle cx="40" cy="96" r="2" fill="#262219"/>
+          <circle cx="110" cy="96" r="2" fill="#262219"/>
+        </g>
+      </svg>
+      <div class="plabel"><span class="pname">The Foundry Mask</span><br>Plate IV · Legendary motif family</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="lotno">Lot 03 — Procedure</div>
+  <h2>How a box is acquired</h2>
+  <ol class="steps">
+    <li><b>Post once on X.</b> Publish the notice below — it carries this catalogue's address. A post is the admission ticket for a <i>free</i> box; it is verified by the registrar before any free claim is signed.</li>
+    <li><b>Claim one free box.</b> Two free routes run side by side: one box for holders of a Binance Agent ID, one box for X posters. A wallet may use <b>both</b> routes — one post per claim — for a maximum of two free boxes.</li>
+    <li><b>Buy more, with no further posting.</b> Paid boxes ask nothing but the price: 0.001 BNB each, up to 100 per transaction, no limit per wallet. What is free is paid for with a post; what is paid for is paid for with BNB.</li>
+  </ol>
+  <h3 style="margin-top:16px">The notice — copy, post, keep the link</h3>
+  <pre class="post" id="shareText"></pre>
+  <div class="flow">
+    <a id="shareBtn" target="_blank" rel="noopener"><button class="ghost" type="button">Post this notice on X</button></a>
+    <button id="copyShare" class="ghost" type="button">Copy the notice</button>
+    <span class="msg" id="msgShare"></span>
+  </div>
+</section>
+
+<section>
+  <div class="lotno">Lot 04 — Free Custody</div>
+  <h2>Claim a free box</h2>
+  <p class="secnote">Both routes run only while the window is open, and both are granted against a post from a verified X account: publish a notice containing this page's address and your file reference — the last six characters of your wallet address, lowercased, issued below once you connect — then file the post's link. The registrar checks the post, signs a custody permit (valid for two hours — claim promptly once signed), and the claim itself costs nothing but gas. One claim per route per wallet; one claim per route per X name.</p>
+
+  <div class="lane">
+    <h3>Route A — Agent ID holders</h3>
+    <p>Your wallet must hold a Binance Agent ID (the registry contract checks this on-chain) <b>and</b> you must have published the notice from a verified X account. Descendants of the works are still expected to sign the visitors' book.</p>
+    <div class="flow"><span>Your file ref:</span><span class="fileref" id="markCodeA">connect first</span>
+      <a id="xPostBtnA" target="_blank" rel="noopener"><button class="ghost" type="button">1 · Post on X</button></a></div>
+    <div class="flow"><input id="tweetUrlA" placeholder="Paste your post link — https://x.com/you/status/…"></div>
+    <div class="flow">
+      <button id="permitBtnA" type="button">2 · Get permit</button>
+      <button id="claimBtnA" class="rust" type="button" disabled>3 · Claim free box</button>
+    </div>
+    <div class="msg" id="msgA"></div>
+  </div>
+
+  <div class="lane">
+    <h3>Route B — X posters</h3>
+    <p>No Agent ID required. Publish the notice from your verified X account, file the link, and the registrar verifies that the post is yours, is public, and carries the link and your file ref before signing.</p>
+    <div class="flow"><span>Your file ref:</span><span class="fileref" id="markCodeB">connect first</span>
+      <a id="xPostBtnB" target="_blank" rel="noopener"><button class="ghost" type="button">1 · Post on X</button></a></div>
+    <div class="flow"><input id="tweetUrlB" placeholder="Paste your post link — https://x.com/you/status/…"></div>
+    <div class="flow">
+      <button id="permitBtnB" type="button">2 · Get permit</button>
+      <button id="claimBtnB" class="rust" type="button" disabled>3 · Claim free box</button>
+    </div>
+    <div class="msg" id="msgB"></div>
+  </div>
+</section>
+
+<section>
+  <div class="lotno">Lot 05 — Paid Accession</div>
+  <h2>Buy boxes — 0.001 BNB each</h2>
+  <p>Open to every wallet while the window is open, whether or not it has claimed a free box. No post is required for paid boxes, and there is no limit per wallet — first come, first served, up to <b>100 boxes per transaction</b>. Payment must be exact: the price is read from the contract and the full amount is forwarded to the treasury in the same transaction.</p>
+  <div class="flow">
+    <label>Boxes: <input type="number" class="num" id="buyQty" value="1" min="1" max="100"></label>
+    <span>Total: <b id="buyTotal">0.001 BNB</b></span>
+    <button id="buyBtn" class="rust">Buy</button>
+  </div>
+  <div class="msg" id="msgBuy"></div>
+</section>
+
+<section>
+  <div class="lotno">Lot 06 — The Exchange Desk</div>
+  <h2>Trade boxes and relics</h2>
+  <p>The registry keeps its own exchange desk, a separate contract with fixed terms: listings are at whatever price the seller names, in BNB, and they do not expire. The desk takes a <b>2.5% fee</b> from the seller's proceeds, paid to the treasury; the seller receives the remaining 97.5%. <b>Sealed boxes may be traded before the reveal</b> — a buyer takes the box exactly as the seller held it, unopened.</p>
+  <p class="small">There is no central listing board and no indexer behind this page: the desk trades by box number. Before buying, check the number's listing below and its ownership on BscScan. If a sale's proceeds cannot be delivered to a seller's wallet directly, they wait at the desk as a pending withdrawal the seller can collect.</p>
+
+  <div class="lane">
+    <h3>Offer a box for sale</h3>
+    <p>You must own the box. Step 1 approves the desk to move that one box when it sells; step 2 records your price. Cancelling returns full control to you.</p>
+    <div class="flow">
+      <label>Box № <input type="number" class="num" id="listTokenId" min="1" placeholder="e.g. 123"></label>
+      <label>Price (BNB) <input type="text" class="price" id="listPrice" placeholder="e.g. 0.005"></label>
+    </div>
+    <div class="flow">
+      <button id="approveBtn" type="button">1 · Approve the desk</button>
+      <button id="listBtn" class="rust" type="button">2 · List at this price</button>
+      <button id="cancelBtn" class="ghost" type="button">Cancel listing</button>
+    </div>
+    <div class="msg" id="msgList"></div>
+  </div>
+
+  <div class="lane">
+    <h3>Acquire a listed box</h3>
+    <p>Enter a box number to read its listing from the desk — seller and price, exactly as recorded — then acquire it at that price.</p>
+    <div class="flow">
+      <label>Box № <input type="number" class="num" id="buyTokenId" min="1" placeholder="e.g. 123"></label>
+      <button id="checkListingBtn" type="button">Read listing</button>
+      <button id="buyListedBtn" class="rust" type="button" disabled>Buy this box</button>
+    </div>
+    <div class="msg" id="msgMarketBuy"></div>
+  </div>
+
+  <div class="lane">
+    <h3>Proceeds awaiting collection</h3>
+    <p>If a sale's proceeds could not be pushed to your wallet, they are held here in your name.</p>
+    <div class="flow">
+      <span>Pending: <b id="pendingAmt">connect wallet</b></span>
+      <button id="withdrawBtn" type="button">Withdraw proceeds</button>
+    </div>
+    <div class="msg" id="msgWithdraw"></div>
+  </div>
+</section>
+
+<section>
+  <div class="lotno">Annex — Visiting Agents</div>
+  <h2>Instructions for agents</h2>
+  <p class="secnote">Agents acting for their owners follow the same procedure (full text: <a href="skill.md">skill.md</a>).</p>
+  <pre class="agent" id="agentPrompt">You are helping me acquire Ferrous Relics (FERO), a sealed-box ERC-721 collection on BNB Smart Chain (chainId 56).
+
+Read the full instructions first: https://ferrous-relics.github.io/ferrous-relics/skill.md and the contract addresses from https://ferrous-relics.github.io/ferrous-relics/llms.txt — never trust an address from anywhere else.
+
+The window runs from unix 1794585600 to 1794844800. Both free routes and paid minting are only open inside it.
+
+STEP 0 — POST FIRST (required before any FREE claim): I post the notice from skill.md on X, from my verified account — it must contain the site URL and my wallet code (my wallet address lowercased, last 6 characters) — then I give you the post link. Paid minting does NOT require a post.
+
+Then:
+- Agent ID route: if my wallet holds a Binance Agent ID, request a permit — POST https://permit-worker.reuniakbarpunk212.workers.dev/fero/permit with JSON {"wallet": my address, "tweetUrl": the post URL} (exactly those two fields) — then call claimAgentFree(handle, deadline, signature) on the registry with exactly what the gate returns, before the deadline (permits live two hours). Value 0.
+- X poster route: the same permit request, then call claimXFree(handle, deadline, signature). Value 0.
+- Paid: call mint(qty) payable with value exactly priceWei x qty (priceWei read live from status(); 0.001 BNB at cataloguing), qty 1-100. No per-wallet limit.
+- Market: list(tokenId, priceWei) after approve(market, tokenId); buy(tokenId) payable at the exact price shown by listingOf(tokenId); cancelListing(tokenId) to withdraw an offer.
+
+Always show me a preview first (action, count, exact BNB value, risks, any authority or approval changes). The ONLY approval in this system is the market approval above, and only for a box I am listing. After each transaction, verify the result on-chain and show me the BscScan link.
+
+This is a collectible with no promised value — remind me of that before I confirm.</pre>
+  <div class="flow"><button id="copyPrompt" class="ghost" type="button">Copy instructions</button><span class="msg" id="msgPrompt"></span></div>
+</section>
+
+<footer>
+  <div>Ferrous Relics (FERO) · ERC-721 · BNB Smart Chain (56)</div>
+  <div>Registry: <span class="mono">0x76FB0A89c8618A1d7Cf3E2123ae43E5aeb36f2F4</span></div>
+  <div>Exchange desk: <span class="mono">0x8a1982a51E74817a7dB7B8F980C970ED1f5A4074</span></div>
+  <div style="margin-top:6px">For agents: <a href="skill.md">skill.md</a> · <a href="llms.txt">llms.txt</a> — the full procedure for free claims, paid minting and the exchange desk.</div>
+  <div style="margin-top:6px">Each relic is drawn by the registry contract itself — deterministic on-chain SVG, sealed until the reveal. This catalogue is not investment advice; a sealed box is a collectible, and its grade is chance, committed in advance. On-chain operations carry risk.</div>
+  <div id="jsState">Register loading…</div>
+</footer>
+
+<script>
+"use strict";
+const $ = id => document.getElementById(id);
+const CONTRACT = "0x76FB0A89c8618A1d7Cf3E2123ae43E5aeb36f2F4";
+const MARKET = "0x8a1982a51E74817a7dB7B8F980C970ED1f5A4074";
+const PERMIT_URL = "https://permit-worker.reuniakbarpunk212.workers.dev/fero/permit";
+const WC_PROJECT_ID = "ff5985647ed78916bed0155d2ff84a1c";
+const SITE = "https://ferrous-relics.github.io/ferrous-relics/";
+const START = 1794585600, END = 1794844800;
+const RPCS = ["https://bsc-dataseed.binance.org", "https://bsc-dataseed1.binance.org", "https://bsc-dataseed2.binance.org", "https://bsc-dataseed3.binance.org", "https://bsc-rpc.publicnode.com"];
+const SEL = { status: "0x200d2ed2", claimAgentFree: "0xa76a4d0e", claimXFree: "0xb3b5b4fe",
+  mint: "0xa0712d68", agentClaimed: "0x40bfe16b", xClaimed: "0x181a2507",
+  ownerOf: "0x6352211e", getApproved: "0x081812fc", approve: "0x095ea7b3",
+  isApprovedForAll: "0xe985e9c5" };
+const MSEL = { list: "0x50fd7367", buy: "0xd96a094a", cancelListing: "0x305a67a8",
+  listingOf: "0xe3404981", pendingWithdrawals: "0xf3f43703", withdraw: "0x3ccfd60b" };
+let provider = null, account = null;
+let priceWei = 1000000000000000n;
+let permits = { agent: null, x: null };
+let checkedListing = null;
+
+const padUint = n => BigInt(n).toString(16).padStart(64, "0");
+const padAddr = a => a.replace(/^0x/, "").toLowerCase().padStart(64, "0");
+const word = (hex, i) => BigInt("0x" + hex.slice(2 + i * 64, 2 + (i + 1) * 64));
+const wordNum = (hex, i) => Number(word(hex, i));
+const wordAddr = (hex, i) => "0x" + hex.slice(2 + i * 64 + 24, 2 + (i + 1) * 64);
+const fmtBNB = wei => (Number(wei) / 1e18).toString() + " BNB";
+const last6 = () => account ? account.toLowerCase().slice(-6) : "······";
+
+function parseBNB(s) {
+  s = String(s || "").trim();
+  if (!/^\d+(\.\d+)?$/.test(s)) return null;
+  const parts = s.split(".");
+  const frac = (parts[1] || "").padEnd(18, "0").slice(0, 18);
+  const v = BigInt(parts[0]) * 1000000000000000000n + BigInt(frac || "0");
+  return v > 0n ? v : null;
+}
+
+function shareNotice() {
+  return "FERROUS RELICS (FERO)\n\n" +
+    "3,333 sealed boxes of ancient machine relics, catalogued on BSC.\n\n" +
+    "Free box for Agent ID holders. Free box for X posters. Paid mint 0.001 BNB.\n\n" +
+    "Post once, claim free, then buy freely. All boxes open together at the reveal.\n\n" +
+    SITE;
+}
+function claimPostText() {
+  return "Claiming a sealed box at the Ferrous Relics archive.\n\n" +
+    SITE + "\n\nFile ref: " + last6();
+}
+function updateLinks() {
+  $("shareText").textContent = shareNotice();
+  $("shareBtn").href = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(shareNotice());
+  for (const lane of ["A", "B"]) {
+    $("xPostBtn" + lane).href = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(claimPostText());
+    $("markCode" + lane).textContent = account ? last6() : "connect first";
+  }
+}
+
+async function rpcCall(data, to) {
+  for (const url of RPCS) {
+    try {
+      const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), 8000);
+      const r = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, signal: ctl.signal,
+        body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "eth_call", params: [{ to: to || CONTRACT, data }, "latest"] }) });
+      clearTimeout(t);
+      const j = await r.json();
+      if (j.result && j.result !== "0x") return j.result;
+    } catch (e) { /* try next */ }
+  }
+  return null;
+}
+
+function tickClock() {
+  const now = Math.floor(Date.now() / 1000);
+  let target, label;
+  if (now < START) { target = START; label = "Opens in "; }
+  else if (now < END) { target = END; label = "Closes in "; }
+  else { $("cdown").textContent = "Window closed — reveal follows"; return; }
+  let d = target - now;
+  const dd = Math.floor(d / 86400), hh = Math.floor(d % 86400 / 3600), mm = Math.floor(d % 3600 / 60), ss = d % 60;
+  $("cdown").textContent = label + (dd > 0 ? dd + "d " : "") +
+    String(hh).padStart(2, "0") + ":" + String(mm).padStart(2, "0") + ":" + String(ss).padStart(2, "0");
+}
+setInterval(tickClock, 1000); tickClock();
+
+async function refresh() {
+  const s = await rpcCall(SEL.status);
+  if (s) {
+    $("cTotal").textContent = wordNum(s, 0).toLocaleString("en-US");
+    priceWei = word(s, 6);
+    updateBuyTotal();
+    if (wordNum(s, 4) === 1) $("cdown").textContent = "Revealed — the boxes are open";
+    $("jsState").textContent = "Register read from the contract just now.";
+  } else {
+    $("jsState").textContent = "The register could not be read (the registry may not be accessioned on-chain yet).";
+  }
+  if (account) {
+    const ac = await rpcCall(SEL.agentClaimed + padAddr(account));
+    if (ac && wordNum(ac, 0) === 1) { $("msgA").className = "msg ok"; $("msgA").textContent = "Your Agent ID box is already in your custody."; }
+    const xc = await rpcCall(SEL.xClaimed + padAddr(account));
+    if (xc && wordNum(xc, 0) === 1) { $("msgB").className = "msg ok"; $("msgB").textContent = "Your X poster box is already in your custody."; }
+    const pw = await rpcCall(MSEL.pendingWithdrawals + padAddr(account), MARKET);
+    if (pw) $("pendingAmt").textContent = fmtBNB(word(pw, 0));
+  }
+}
+
+async function loadWC() {
+  for (const u of ["https://unpkg.com/@walletconnect/ethereum-provider@2.21.0/dist/index.umd.js", "https://cdn.jsdelivr.net/npm/@walletconnect/ethereum-provider@2.21.0/dist/index.umd.js"]) {
+    try { await new Promise((res, rej) => { const sc = document.createElement("script"); sc.src = u; sc.onload = res; sc.onerror = rej; document.head.appendChild(sc); }); if (window["@walletconnect/ethereum-provider"]) return true; } catch (e) {}
+  }
+  return false;
+}
+$("connectBtn").onclick = async () => {
+  const msg = $("walletMsg");
+  try {
+    if (window.ethereum) { provider = window.ethereum; }
+    else {
+      msg.textContent = "Opening WalletConnect…";
+      if (!await loadWC()) throw new Error("WalletConnect failed to load");
+      provider = await window["@walletconnect/ethereum-provider"].EthereumProvider.init({
+        projectId: WC_PROJECT_ID, chains: [56], optionalChains: [56], showQrModal: true,
+        rpcMap: { 56: "https://bsc-dataseed.binance.org" },
+        metadata: { name: "Ferrous Relics", description: "3,333 sealed boxes of ancient machine relics, catalogued on BNB Smart Chain.", url: SITE, icons: [] }
+      });
+      await provider.connect();
+    }
+    const accs = await provider.request({ method: "eth_requestAccounts" });
+    account = accs[0];
+    await provider.request({ method: "wallet_switchEthereumChain", params: [{ chainId: "0x38" }] }).catch(() => {});
+    $("acct").textContent = account;
+    msg.className = "msg ok"; msg.textContent = "Connected. The registry office is open.";
+    updateLinks(); refresh();
+  } catch (e) { msg.className = "msg err"; msg.textContent = e.message || String(e); }
+};
+async function sendTx(to, data, valueHex) {
+  if (!provider || !account) throw new Error("Connect your wallet first.");
+  await provider.request({ method: "wallet_switchEthereumChain", params: [{ chainId: "0x38" }] }).catch(() => {});
+  return provider.request({ method: "eth_sendTransaction", params: [{ from: account, to: to, value: valueHex || "0x0", data: data }] });
+}
+function afterTx(msgEl, h, note) {
+  msgEl.className = "msg ok";
+  msgEl.innerHTML = (note || "Filed") + " — tx <a href='https://bscscan.com/tx/" + h + "' target='_blank' rel='noopener'>" + h.slice(0, 18) + "…</a>";
+  setTimeout(refresh, 4000);
+}
+
+/* ---- Free claims (both lanes share the permit flow) ---- */
+function encClaim(sel, handle, deadline, sigHex) {
+  const hb = new TextEncoder().encode(handle);
+  const hHex = [...hb].map(b => b.toString(16).padStart(2, "0")).join("");
+  const hPad = hHex.padEnd(Math.max(64, Math.ceil(hHex.length / 64) * 64), "0");
+  const sig = sigHex.replace(/^0x/, "");
+  const bytesOff = 96 + 32 + hPad.length / 2;
+  return sel + padUint(96) + padUint(deadline) + padUint(bytesOff)
+    + padUint(hb.length) + hPad + padUint(sig.length / 2) + sig.padEnd(192, "0");
+}
+function wireLane(laneKey, suffix, sel) {
+  $("permitBtn" + suffix).onclick = async () => {
+    const msg = $("msg" + suffix);
+    const url = $("tweetUrl" + suffix).value.trim();
+    if (!account) { msg.className = "msg err"; msg.textContent = "Connect your wallet first."; return; }
+    if (!url) { msg.className = "msg err"; msg.textContent = "Paste your post link first."; return; }
+    msg.className = "msg"; msg.textContent = "The registrar is verifying your notice…";
+    try {
+      const r = await fetch(PERMIT_URL, { method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ wallet: account, tweetUrl: url }) });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok) {
+        let m;
+        if (r.status === 400) m = "The registrar could not accept that wallet or post link — check the link and try again.";
+        else if (r.status === 422) m = "Your post could not be verified: it must be public, from a verified X account, and contain the catalogue link and your file ref (" + last6() + ").";
+        else if (r.status === 502) m = "The verification lookup failed — please wait a moment and retry.";
+        else m = "The registrar returned an error (" + r.status + ").";
+        if (j.error) m += " Registrar: " + j.error;
+        throw new Error(m);
+      }
+      permits[laneKey] = j;
+      $("claimBtn" + suffix).disabled = false;
+      msg.className = "msg ok"; msg.textContent = "Permit signed for @" + j.handle + " — now press 3 to claim (the permit lives for two hours).";
+    } catch (e) { msg.className = "msg err"; msg.textContent = e.message || String(e); }
+  };
+  $("claimBtn" + suffix).onclick = async () => {
+    const msg = $("msg" + suffix);
+    try {
+      const p = permits[laneKey];
+      if (!p) throw new Error("Get a permit first (step 2).");
+      msg.className = "msg"; msg.textContent = "Claiming on-chain…";
+      const h = await sendTx(CONTRACT, encClaim(sel, p.handle, p.deadline, p.signature));
+      permits[laneKey] = null; $("claimBtn" + suffix).disabled = true;
+      afterTx(msg, h, "Box claimed");
+    } catch (e) { msg.className = "msg err"; msg.textContent = e.message || String(e); }
+  };
+}
+wireLane("agent", "A", SEL.claimAgentFree);
+wireLane("x", "B", SEL.claimXFree);
+
+/* ---- Paid mint ---- */
+function buyQty() {
+  let q = parseInt($("buyQty").value || "1", 10);
+  if (isNaN(q)) q = 1;
+  return Math.max(1, Math.min(100, q));
+}
+function updateBuyTotal() { $("buyTotal").textContent = fmtBNB(priceWei * BigInt(buyQty())); }
+$("buyQty").addEventListener("input", updateBuyTotal);
+$("buyBtn").onclick = async () => {
+  const msg = $("msgBuy");
+  try {
+    if (!account) throw new Error("Connect your wallet first.");
+    const q = buyQty();
+    const value = "0x" + (priceWei * BigInt(q)).toString(16);
+    msg.className = "msg"; msg.textContent = "Accessioning " + q + " box(es) for " + fmtBNB(priceWei * BigInt(q)) + "…";
+    const h = await sendTx(CONTRACT, SEL.mint + padUint(q), value);
+    afterTx(msg, h, "Accessioned");
+  } catch (e) { msg.className = "msg err"; msg.textContent = e.message || String(e); }
+};
+
+/* ---- Exchange desk ---- */
+function tokenIdOf(id) {
+  const v = parseInt($(id).value || "", 10);
+  return (isNaN(v) || v < 1) ? null : v;
+}
+$("approveBtn").onclick = async () => {
+  const msg = $("msgList");
+  try {
+    if (!account) throw new Error("Connect your wallet first.");
+    const tid = tokenIdOf("listTokenId");
+    if (tid === null) throw new Error("Enter the box number first.");
+    const own = await rpcCall(SEL.ownerOf + padUint(tid));
+    if (!own || wordAddr(own, 0).toLowerCase() !== account.toLowerCase()) throw new Error("This wallet does not own box № " + tid + ".");
+    const ga = await rpcCall(SEL.getApproved + padUint(tid));
+    const afa = await rpcCall(SEL.isApprovedForAll + padAddr(account) + padAddr(MARKET));
+    if ((ga && wordAddr(ga, 0).toLowerCase() === MARKET.toLowerCase()) || (afa && wordNum(afa, 0) === 1)) {
+      msg.className = "msg ok"; msg.textContent = "The desk is already approved for this box — proceed to step 2.";
+      return;
+    }
+    msg.className = "msg"; msg.textContent = "Approving the desk for box № " + tid + "…";
+    const h = await sendTx(CONTRACT, SEL.approve + padAddr(MARKET) + padUint(tid));
+    afterTx(msg, h, "Approval filed — wait for it to confirm, then list");
+  } catch (e) { msg.className = "msg err"; msg.textContent = e.message || String(e); }
+};
+$("listBtn").onclick = async () => {
+  const msg = $("msgList");
+  try {
+    if (!account) throw new Error("Connect your wallet first.");
+    const tid = tokenIdOf("listTokenId");
+    if (tid === null) throw new Error("Enter the box number first.");
+    const price = parseBNB($("listPrice").value);
+    if (price === null) throw new Error("Enter a price in BNB, e.g. 0.005.");
+    msg.className = "msg"; msg.textContent = "Listing box № " + tid + " at " + fmtBNB(price) + "…";
+    const h = await sendTx(MARKET, MSEL.list + padUint(tid) + padUint(price));
+    afterTx(msg, h, "Listed");
+  } catch (e) { msg.className = "msg err"; msg.textContent = e.message || String(e); }
+};
+$("cancelBtn").onclick = async () => {
+  const msg = $("msgList");
+  try {
+    if (!account) throw new Error("Connect your wallet first.");
+    const tid = tokenIdOf("listTokenId");
+    if (tid === null) throw new Error("Enter the box number first.");
+    msg.className = "msg"; msg.textContent = "Cancelling the listing of box № " + tid + "…";
+    const h = await sendTx(MARKET, MSEL.cancelListing + padUint(tid));
+    afterTx(msg, h, "Listing cancelled");
+  } catch (e) { msg.className = "msg err"; msg.textContent = e.message || String(e); }
+};
+$("checkListingBtn").onclick = async () => {
+  const msg = $("msgMarketBuy");
+  checkedListing = null; $("buyListedBtn").disabled = true;
+  const tid = tokenIdOf("buyTokenId");
+  if (tid === null) { msg.className = "msg err"; msg.textContent = "Enter a box number."; return; }
+  msg.className = "msg"; msg.textContent = "Reading the desk's book…";
+  const l = await rpcCall(MSEL.listingOf + padUint(tid), MARKET);
+  if (!l) { msg.className = "msg err"; msg.textContent = "The listing could not be read."; return; }
+  const seller = wordAddr(l, 0), price = word(l, 1), active = wordNum(l, 2) === 1;
+  if (!active || price === 0n) { msg.className = "msg"; msg.textContent = "Box № " + tid + " is not listed for sale."; return; }
+  checkedListing = { tid: tid, price: price };
+  $("buyListedBtn").disabled = false;
+  msg.className = "msg ok";
+  msg.textContent = "Box № " + tid + " — seller " + seller.slice(0, 6) + "…" + seller.slice(-4) + ", price " + fmtBNB(price) + ". The desk's fee (2.5%) comes out of the seller's side.";
+};
+$("buyListedBtn").onclick = async () => {
+  const msg = $("msgMarketBuy");
+  try {
+    if (!account) throw new Error("Connect your wallet first.");
+    if (!checkedListing) throw new Error("Read the listing first.");
+    const value = "0x" + checkedListing.price.toString(16);
+    msg.className = "msg"; msg.textContent = "Acquiring box № " + checkedListing.tid + " for " + fmtBNB(checkedListing.price) + "…";
+    const h = await sendTx(MARKET, MSEL.buy + padUint(checkedListing.tid), value);
+    checkedListing = null; $("buyListedBtn").disabled = true;
+    afterTx(msg, h, "Box acquired");
+  } catch (e) { msg.className = "msg err"; msg.textContent = e.message || String(e); }
+};
+$("withdrawBtn").onclick = async () => {
+  const msg = $("msgWithdraw");
+  try {
+    if (!account) throw new Error("Connect your wallet first.");
+    msg.className = "msg"; msg.textContent = "Collecting your proceeds…";
+    const h = await sendTx(MARKET, MSEL.withdraw);
+    afterTx(msg, h, "Proceeds collected");
+  } catch (e) { msg.className = "msg err"; msg.textContent = e.message || String(e); }
+};
+
+/* ---- Copy helpers ---- */
+$("copyShare").onclick = async () => {
+  await navigator.clipboard.writeText(shareNotice()).catch(() => {});
+  $("msgShare").textContent = "Copied.";
+};
+$("copyPrompt").onclick = async () => {
+  await navigator.clipboard.writeText($("agentPrompt").textContent).catch(() => {});
+  $("msgPrompt").textContent = "Copied.";
+};
+
+updateLinks(); updateBuyTotal(); refresh();
+setInterval(refresh, 30000);
+</script>
+</body>
+</html>

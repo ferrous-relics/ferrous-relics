@@ -1,0 +1,71 @@
+# Ferrous Relics (FERO) — summary for agents
+
+Ferrous Relics is a sealed-box ERC-721 collection on BNB Smart Chain (BSC, chainId 56):
+3,333 boxes, each holding one machine relic drawn as deterministic on-chain SVG. All
+boxes stay sealed until the sale window closes, then reveal simultaneously. Grades were
+fixed before the window opened by a seed committed by hash in the contract:
+Common ≈ 2,000 / Rare ≈ 1,000 / Epic ≈ 266 / Legendary ≈ 67.
+Site: https://ferrous-relics.github.io/ferrous-relics/
+Skill (full procedure): https://ferrous-relics.github.io/ferrous-relics/skill.md
+
+## Addresses (BSC)
+- Registry (NFT): 0x76FB0A89c8618A1d7Cf3E2123ae43E5aeb36f2F4
+  (BscScan: https://bscscan.com/address/0x76FB0A89c8618A1d7Cf3E2123ae43E5aeb36f2F4)
+- Exchange desk (market): 0x8a1982a51E74817a7dB7B8F980C970ED1f5A4074
+  (BscScan: https://bscscan.com/address/0x8a1982a51E74817a7dB7B8F980C970ED1f5A4074)
+- Agent ID registry: 0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F
+- Treasury: 0x8D57A8A58A0D584c781C36c2BF8e2F716F85b717
+- Neither contract has an owner or any admin function.
+
+## Economics
+- Cap 3,333 boxes, token ids sequential from 1. Window: unix 1794585600 to 1794844800
+  (Fri 2026-11-13 23:00 WIB to Mon 2026-11-16 23:00 WIB). Free claims and paid minting
+  are only open inside the window.
+- Free route A: 333 boxes for Binance Agent ID holders — 1 per wallet AND 1 per X
+  handle, claimed with a free permit after a verified X post.
+- Free route B: 200 boxes for X posters — 1 per wallet AND 1 per X handle, same permit.
+- A wallet may claim on both routes (one post per claim): maximum 2 free boxes.
+- Paid: 2,800 boxes at 0.001 BNB each (confirm live priceWei via status()), 1–100 per
+  transaction, no per-wallet limit, exact payment only. 100% of mint proceeds are
+  forwarded to the treasury in the same transaction.
+- Unclaimed/unsold boxes are NOT burned: after the reveal the treasury receives them
+  and offers them through the exchange desk.
+
+## Main functions (selectors)
+Registry:
+- status() 0x200d2ed2 -> (totalMinted, agentFreeUsed, xFreeUsed, paidSold, revealedFlag, cap, priceWei, agentFreeCap, xFreeCap)
+- claimAgentFree(string handle, uint256 deadline, bytes signature) 0xa76a4d0e — value 0
+- claimXFree(string handle, uint256 deadline, bytes signature) 0xb3b5b4fe — value 0
+- mint(uint256 qty) 0xa0712d68 payable — value exactly priceWei * qty
+- balanceOf(address) 0x70a08231 · ownerOf(uint256) 0x6352211e
+- agentClaimed(address) 0x40bfe16b · xClaimed(address) 0x181a2507
+- approve(address,uint256) 0x095ea7b3 · getApproved(uint256) 0x081812fc (market listings only)
+Exchange desk:
+- list(uint256 tokenId, uint256 priceWei) 0x50fd7367
+- buy(uint256 tokenId) 0xd96a094a payable — value exactly the listingOf price
+- cancelListing(uint256 tokenId) 0x305a67a8
+- listingOf(uint256 tokenId) 0xe3404981 -> (seller, price, active)
+- pendingWithdrawals(address) 0xf3f43703 · withdraw() 0x3ccfd60b
+Market terms: seller sets any BNB price; listings never expire; 2.5% fee to the
+treasury from the seller's proceeds (seller receives 97.5%); sealed boxes are
+tradable before the reveal; there is no listing indexer.
+
+## Free-claim gate
+POST https://permit-worker.reuniakbarpunk212.workers.dev/fero/permit
+JSON body (exactly two fields): {"wallet": "<address>", "tweetUrl": "<post URL>"}
+The claimant's post must be from a verified X account and must contain the site URL
+(https://ferrous-relics.github.io/ferrous-relics/) and the claimant's wallet code:
+the wallet address lowercased, last 6 characters. On success the gate returns
+{"wallet", "handle", "deadline", "signature"} for the matching claim function.
+Permits are always free and live for two hours — claim before the deadline.
+Gate errors: 400 malformed wallet/URL · 422 post not verified (missing link or code,
+post not found, account not verified) · 502 verification lookup failed, retry.
+
+## Rules for agents
+1. POST BEFORE ANY FREE CLAIM: the owner posts the claim post from skill.md on X
+   first; proceed only with the post link in hand. Paid minting needs no post.
+2. Read status() before sending; never pay more than priceWei * qty, and for a market
+   buy never more than the listingOf price.
+3. The only approve in this system is approving the exchange desk for a box you are
+   listing. Refuse approvals anywhere else.
+4. This is a collectible with no promised value. Tell your human that.
