@@ -149,7 +149,51 @@
 </section>
 
 <section>
-  <div class="lotno">Lot 01 — The Collection</div>
+  <div class="lotno">Lot 01 — Paid Accession</div>
+  <h2>Buy boxes — 0.001 BNB each</h2>
+  <p>Open to every wallet while the window is open, whether or not it has claimed a free box. No post is required for paid boxes, and there is no limit per wallet — first come, first served, up to <b>100 boxes per transaction</b>. Payment must be exact: the price is read from the contract and the full amount is forwarded to the treasury in the same transaction.</p>
+  <div class="flow">
+    <label>Boxes: <input type="number" class="num" id="buyQty" value="1" min="1" max="100"></label>
+    <span>Total: <b id="buyTotal">0.001 BNB</b></span>
+    <button id="buyBtn" class="rust">Buy</button>
+  </div>
+  <div class="msg" id="msgBuy"></div>
+</section>
+
+<section>
+  <div class="lotno">Lot 02 — Free Custody</div>
+  <h2>Claim a free box</h2>
+  <p class="secnote">Both routes run only while the window is open, and both are granted against a post from your own X account — Route B only to verified accounts, while on Route A the registrar waives the verified check for any wallet that holds an Agent ID: publish a notice containing this page's address and your file reference — the last six characters of your wallet address, lowercased, issued below once you connect — then file the post's link. The registrar checks the post, signs a custody permit (valid for two hours — claim promptly once signed), and the claim itself costs nothing but gas. One claim per route per wallet; one claim per route per X name.</p>
+
+  <div class="lane">
+    <h3>Route A — Agent ID holders</h3>
+    <p>Your wallet must hold a Binance Agent ID (the registry contract checks this on-chain) <b>and</b> you must have published the notice from your own X account — any account, verified or not: custody follows the Agent ID, not the badge. Descendants of the works are still expected to sign the visitors' book.</p>
+    <div class="flow"><span>Your file ref:</span><span class="fileref" id="markCodeA">connect first</span>
+      <a id="xPostBtnA" target="_blank" rel="noopener"><button class="ghost" type="button">1 · Post on X</button></a></div>
+    <div class="flow"><input id="tweetUrlA" placeholder="Paste your post link — https://x.com/you/status/…"></div>
+    <div class="flow">
+      <button id="permitBtnA" type="button">2 · Get permit</button>
+      <button id="claimBtnA" class="rust" type="button" disabled>3 · Claim free box</button>
+    </div>
+    <div class="msg" id="msgA"></div>
+  </div>
+
+  <div class="lane">
+    <h3>Route B — X posters</h3>
+    <p>No Agent ID required. Publish the notice from your verified X account, file the link, and the registrar verifies that the post is yours, is public, and carries the link and your file ref before signing.</p>
+    <div class="flow"><span>Your file ref:</span><span class="fileref" id="markCodeB">connect first</span>
+      <a id="xPostBtnB" target="_blank" rel="noopener"><button class="ghost" type="button">1 · Post on X</button></a></div>
+    <div class="flow"><input id="tweetUrlB" placeholder="Paste your post link — https://x.com/you/status/…"></div>
+    <div class="flow">
+      <button id="permitBtnB" type="button">2 · Get permit</button>
+      <button id="claimBtnB" class="rust" type="button" disabled>3 · Claim free box</button>
+    </div>
+    <div class="msg" id="msgB"></div>
+  </div>
+</section>
+
+<section>
+  <div class="lotno">Lot 03 — The Collection</div>
   <h2>What is in the boxes</h2>
   <div class="herowrap">
     <div class="txt">
@@ -194,7 +238,7 @@
 </section>
 
 <section>
-  <div class="lotno">Lot 02 — Specimen Plates</div>
+  <div class="lotno">Lot 04 — Specimen Plates</div>
   <h2>Studies of the four motif families</h2>
   <p class="secnote">The relics are drawn by the registry contract itself, as on-chain engravings assembled from trait plates. These studies show the draughtsmanship, not the contents of any particular box.</p>
   <div class="plates">
@@ -265,10 +309,10 @@
 </section>
 
 <section>
-  <div class="lotno">Lot 03 — Procedure</div>
+  <div class="lotno">Lot 05 — Procedure</div>
   <h2>How a box is acquired</h2>
   <ol class="steps">
-    <li><b>Post once on X.</b> A post is the admission ticket for a <i>free</i> box; it is checked by the registrar before any free claim is signed. Post from the claim forms in Lot 04 — they compose the notice with this catalogue's address and your personal file reference.</li>
+    <li><b>Post once on X.</b> A post is the admission ticket for a <i>free</i> box; it is checked by the registrar before any free claim is signed. Post from the claim forms in Lot 02 — they compose the notice with this catalogue's address and your personal file reference.</li>
     <li><b>Claim one free box.</b> Two free routes run side by side: one box for holders of a Binance Agent ID, one box for X posters. A wallet may use <b>both</b> routes — one post per claim — for a maximum of two free boxes.</li>
     <li><b>Buy more, with no further posting.</b> Paid boxes ask nothing but the price: 0.001 BNB each, up to 100 per transaction, no limit per wallet. What is free is paid for with a post; what is paid for is paid for with BNB.</li>
   </ol>
@@ -279,51 +323,7 @@
     <button id="copyShare" class="ghost" type="button">Copy the notice</button>
     <span class="msg" id="msgShare"></span>
   </div>
-  <p class="secnote">For sharing only: this announcement carries no file reference, so it cannot claim a box by itself — claims are posted from Lot 04.</p>
-</section>
-
-<section>
-  <div class="lotno">Lot 04 — Free Custody</div>
-  <h2>Claim a free box</h2>
-  <p class="secnote">Both routes run only while the window is open, and both are granted against a post from your own X account — Route B only to verified accounts, while on Route A the registrar waives the verified check for any wallet that holds an Agent ID: publish a notice containing this page's address and your file reference — the last six characters of your wallet address, lowercased, issued below once you connect — then file the post's link. The registrar checks the post, signs a custody permit (valid for two hours — claim promptly once signed), and the claim itself costs nothing but gas. One claim per route per wallet; one claim per route per X name.</p>
-
-  <div class="lane">
-    <h3>Route A — Agent ID holders</h3>
-    <p>Your wallet must hold a Binance Agent ID (the registry contract checks this on-chain) <b>and</b> you must have published the notice from your own X account — any account, verified or not: custody follows the Agent ID, not the badge. Descendants of the works are still expected to sign the visitors' book.</p>
-    <div class="flow"><span>Your file ref:</span><span class="fileref" id="markCodeA">connect first</span>
-      <a id="xPostBtnA" target="_blank" rel="noopener"><button class="ghost" type="button">1 · Post on X</button></a></div>
-    <div class="flow"><input id="tweetUrlA" placeholder="Paste your post link — https://x.com/you/status/…"></div>
-    <div class="flow">
-      <button id="permitBtnA" type="button">2 · Get permit</button>
-      <button id="claimBtnA" class="rust" type="button" disabled>3 · Claim free box</button>
-    </div>
-    <div class="msg" id="msgA"></div>
-  </div>
-
-  <div class="lane">
-    <h3>Route B — X posters</h3>
-    <p>No Agent ID required. Publish the notice from your verified X account, file the link, and the registrar verifies that the post is yours, is public, and carries the link and your file ref before signing.</p>
-    <div class="flow"><span>Your file ref:</span><span class="fileref" id="markCodeB">connect first</span>
-      <a id="xPostBtnB" target="_blank" rel="noopener"><button class="ghost" type="button">1 · Post on X</button></a></div>
-    <div class="flow"><input id="tweetUrlB" placeholder="Paste your post link — https://x.com/you/status/…"></div>
-    <div class="flow">
-      <button id="permitBtnB" type="button">2 · Get permit</button>
-      <button id="claimBtnB" class="rust" type="button" disabled>3 · Claim free box</button>
-    </div>
-    <div class="msg" id="msgB"></div>
-  </div>
-</section>
-
-<section>
-  <div class="lotno">Lot 05 — Paid Accession</div>
-  <h2>Buy boxes — 0.001 BNB each</h2>
-  <p>Open to every wallet while the window is open, whether or not it has claimed a free box. No post is required for paid boxes, and there is no limit per wallet — first come, first served, up to <b>100 boxes per transaction</b>. Payment must be exact: the price is read from the contract and the full amount is forwarded to the treasury in the same transaction.</p>
-  <div class="flow">
-    <label>Boxes: <input type="number" class="num" id="buyQty" value="1" min="1" max="100"></label>
-    <span>Total: <b id="buyTotal">0.001 BNB</b></span>
-    <button id="buyBtn" class="rust">Buy</button>
-  </div>
-  <div class="msg" id="msgBuy"></div>
+  <p class="secnote">For sharing only: this announcement carries no file reference, so it cannot claim a box by itself — claims are posted from Lot 02.</p>
 </section>
 
 <section>
