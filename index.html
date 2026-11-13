@@ -129,9 +129,35 @@
   footer{margin-top:34px; border-top:3px double var(--ink); padding-top:14px; font-size:15px; color:var(--ink2)}
   .acct{font-family:"IBM Plex Mono", monospace; font-size:13px; font-weight:500}
   @media(max-width:640px){ h1{font-size:38px} body{padding:0 18px 48px} }
+
+  html{scroll-behavior:smooth}
+  section[id]{scroll-margin-top:88px}
+  .topbar{position:sticky; top:0; z-index:60; display:flex; align-items:center; gap:8px 14px; flex-wrap:wrap; background:var(--paper); border-bottom:3px double var(--ink); padding:10px 0 8px}
+  .topbar .brand{font-family:"Fraunces", serif; font-weight:700; letter-spacing:1px; font-size:17px}
+  .topbar .navlinks{display:flex; gap:8px; flex-wrap:wrap}
+  .navbtn{font-family:"IBM Plex Mono", monospace; font-size:12px; letter-spacing:1.5px; text-transform:uppercase; color:var(--ink); text-decoration:none; border:1.5px solid var(--ink); background:var(--card); padding:6px 12px}
+  .navbtn:hover{background:var(--paper2)}
+  .topbar .navwallet{display:flex; align-items:center; gap:10px; margin-left:auto}
+  .topbar .msg{flex:1 1 100%; min-height:0; margin:2px 0 0; font-size:13.5px}
+  .topbar .msg:empty{display:none}
 </style>
 </head>
 <body>
+
+<nav class="topbar">
+  <span class="brand">FERROUS RELICS</span>
+  <span class="navlinks">
+    <a class="navbtn" href="#buy">Buy</a>
+    <a class="navbtn" href="#claim">Free claim</a>
+    <a class="navbtn" href="#market">Market</a>
+    <a class="navbtn" href="#agents">Agent prompt</a>
+  </span>
+  <span class="navwallet">
+    <span id="acct" class="acct">Not connected</span>
+    <button id="connectBtn" type="button">Connect wallet</button>
+  </span>
+  <div class="msg" id="walletMsg"></div>
+</nav>
 
 <header class="masthead">
   <div class="dept"><span>Archive of Industrial Antiquities</span><span>Dept. of Ferrous Relics</span><span>Catalogue № 29</span></div>
@@ -148,11 +174,6 @@
 
 <section style="border-top:none; margin-top:10px; padding-top:14px">
   <h3>Registry Office — Admission</h3>
-  <div class="flow">
-    <button id="connectBtn">Connect wallet</button>
-    <span id="acct" class="acct">Not connected</span>
-  </div>
-  <div class="msg" id="walletMsg"></div>
   <p class="small">Registry (BNB Smart Chain, 56): <span class="mono">0x76FB0A89c8618A1d7Cf3E2123ae43E5aeb36f2F4</span> ·
   <a href="https://bscscan.com/address/0x76FB0A89c8618A1d7Cf3E2123ae43E5aeb36f2F4" target="_blank" rel="noopener">BscScan</a><br>
   Exchange desk: <span class="mono">0x8a1982a51E74817a7dB7B8F980C970ED1f5A4074</span> ·
@@ -160,7 +181,7 @@
   Neither contract has an administrator: no owner, no pause, no withdrawal of other people's property. Paid-mint BNB is forwarded to the treasury in the same transaction; the registry retains nothing.</p>
 </section>
 
-<section>
+<section id="buy">
   <div class="lotno">Lot 01 — Paid Accession</div>
   <h2>Buy boxes — 0.001 BNB each</h2>
   <p>Open to every wallet while the window is open, whether or not it has claimed a free box. No post is required for paid boxes, and there is no limit per wallet — first come, first served, up to <b>100 boxes per transaction</b>. Payment must be exact: the price is read from the contract and the full amount is forwarded to the treasury in the same transaction.</p>
@@ -172,7 +193,7 @@
   <div class="msg" id="msgBuy"></div>
 </section>
 
-<section>
+<section id="claim">
   <div class="lotno">Lot 02 — Free Custody</div>
   <h2>Claim a free box</h2>
   <p class="secnote">Both routes run only while the window is open, and both are granted against a post from your own X account — Route B only to verified accounts, while on Route A the registrar waives the verified check for any wallet that holds an Agent ID: publish a notice containing this page's address and your file reference — the last six characters of your wallet address, lowercased, issued below once you connect — then file the post's link. The registrar checks the post, signs a custody permit (valid for two hours — claim promptly once signed), and the claim itself costs nothing but gas. One claim per route per wallet; one claim per route per X name.</p>
@@ -204,7 +225,7 @@
   </div>
 </section>
 
-<section>
+<section id="market">
   <div class="lotno">Lot 03 — The Exchange Desk</div>
   <h2>Trade boxes and relics</h2>
   <p>The registry keeps its own exchange desk, a separate contract with fixed terms: listings are at whatever price the seller names, in BNB, and they do not expire. The desk takes a <b>2.5% fee</b> from the seller's proceeds, paid to the treasury; the seller receives the remaining 97.5%. <b>Sealed boxes may be traded before the reveal</b> — a buyer takes the box exactly as the seller held it, unopened.</p>
@@ -363,7 +384,7 @@
   <p class="secnote">For sharing only: this announcement carries no file reference, so it cannot claim a box by itself — claims are posted from Lot 02.</p>
 </section>
 
-<section>
+<section id="agents">
   <div class="lotno">Annex — Visiting Agents</div>
   <h2>Instructions for agents</h2>
   <p class="secnote">Agents acting for their owners follow the same procedure (full text: <a href="skill.md">skill.md</a>).</p>
